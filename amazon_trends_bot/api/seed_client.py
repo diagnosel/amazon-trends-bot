@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from urllib.parse import quote_plus
+
 from amazon_trends_bot.config import Settings
 from amazon_trends_bot.domain.models import ProductCandidate
 
@@ -17,7 +19,7 @@ class SeedProductSource:
                 category="Home & Kitchen",
                 estimated_sales=3200,
                 price=34.99,
-                url=f"{self.settings.amazon_base_url}/dp/SEEDPORT01",
+                url=self._build_search_url("Portable Blender for Smoothies and Travel"),
             ),
             ProductCandidate(
                 asin="SEEDDESK02",
@@ -26,7 +28,7 @@ class SeedProductSource:
                 category="Office Products",
                 estimated_sales=2800,
                 price=22.49,
-                url=f"{self.settings.amazon_base_url}/dp/SEEDDESK02",
+                url=self._build_search_url("Desk Organizer with Drawer for Home Office"),
             ),
             ProductCandidate(
                 asin="SEEDLED03",
@@ -35,7 +37,7 @@ class SeedProductSource:
                 category="Home & Kitchen",
                 estimated_sales=4100,
                 price=18.99,
-                url=f"{self.settings.amazon_base_url}/dp/SEEDLED03",
+                url=self._build_search_url("LED Strip Lights for Bedroom Decor"),
             ),
             ProductCandidate(
                 asin="SEEDFAN04",
@@ -44,7 +46,7 @@ class SeedProductSource:
                 category="Home & Kitchen",
                 estimated_sales=2600,
                 price=19.99,
-                url=f"{self.settings.amazon_base_url}/dp/SEEDFAN04",
+                url=self._build_search_url("Mini Desk Fan USB Rechargeable"),
             ),
             ProductCandidate(
                 asin="SEEDPOST05",
@@ -53,7 +55,7 @@ class SeedProductSource:
                 category="Sports & Outdoors",
                 estimated_sales=3700,
                 price=27.99,
-                url=f"{self.settings.amazon_base_url}/dp/SEEDPOST05",
+                url=self._build_search_url("Posture Corrector Back Support Brace"),
             ),
             ProductCandidate(
                 asin="SEEDMUG06",
@@ -62,7 +64,7 @@ class SeedProductSource:
                 category="Home & Kitchen",
                 estimated_sales=1900,
                 price=29.99,
-                url=f"{self.settings.amazon_base_url}/dp/SEEDMUG06",
+                url=self._build_search_url("Self Heating Coffee Mug Warmer"),
             ),
             ProductCandidate(
                 asin="SEEDWALK07",
@@ -71,7 +73,7 @@ class SeedProductSource:
                 category="Sports & Outdoors",
                 estimated_sales=2400,
                 price=249.0,
-                url=f"{self.settings.amazon_base_url}/dp/SEEDWALK07",
+                url=self._build_search_url("Walking Pad Treadmill for Home Office"),
             ),
             ProductCandidate(
                 asin="SEEDSKIN08",
@@ -80,7 +82,7 @@ class SeedProductSource:
                 category="Beauty & Personal Care",
                 estimated_sales=3500,
                 price=15.99,
-                url=f"{self.settings.amazon_base_url}/dp/SEEDSKIN08",
+                url=self._build_search_url("Ice Roller for Face and Skin Care"),
             ),
             ProductCandidate(
                 asin="SEEDMEAL09",
@@ -89,7 +91,7 @@ class SeedProductSource:
                 category="Home & Kitchen",
                 estimated_sales=2100,
                 price=31.99,
-                url=f"{self.settings.amazon_base_url}/dp/SEEDMEAL09",
+                url=self._build_search_url("Glass Meal Prep Containers with Lids"),
             ),
             ProductCandidate(
                 asin="SEEDSUN10",
@@ -98,8 +100,10 @@ class SeedProductSource:
                 category="Beauty & Personal Care",
                 estimated_sales=3000,
                 price=12.99,
-                url=f"{self.settings.amazon_base_url}/dp/SEEDSUN10",
+                url=self._build_search_url("Sunscreen Stick for Outdoor Sports"),
             ),
         ]
         return samples[:limit]
 
+    def _build_search_url(self, query: str) -> str:
+        return f"{self.settings.amazon_base_url}/s?k={quote_plus(query)}"

@@ -18,11 +18,14 @@ def compose_start_message(settings: Settings) -> str:
 
 def compose_daily_report(report: DailyReport, settings: Settings) -> str:
     local_dt = report.generated_at.astimezone(ZoneInfo(settings.timezone))
+    has_seed_items = any(match.product.asin.startswith("SEED") for match in report.matches)
     header = [
         "Ежедневный top 5 по товарам и SEO-запросам",
         f"Собрано: {local_dt.strftime('%Y-%m-%d %H:%M %Z')}",
-        "",
     ]
+    if has_seed_items:
+        header.append("Free mode: links below open Amazon search results for the product idea, not exact product pages.")
+    header.append("")
     body = [format_match(match, index + 1) for index, match in enumerate(report.matches)]
     return "\n\n".join(header + body)
 
@@ -46,9 +49,11 @@ def compose_keyword_report(result: KeywordCommandResult) -> str:
 def format_match(match: ProductKeywordMatch, index: int) -> str:
     suggestions = "\n".join(f"- {item}" for item in match.seo_suggestions)
     price = f"${match.product.price:.2f}" if match.product.price is not None else "н/д"
+    id_label = "Seed ID" if match.product.asin.startswith("SEED") else "ASIN"
+    url_label = "Search URL" if "/s?k=" in match.product.url else "URL"
     return (
         f"{index}. {match.product.title}\n"
-        f"ASIN: {match.product.asin}\n"
+        f"{id_label}: {match.product.asin}\n"
         f"Категория: {match.product.category}\n"
         f"Цена: {price}\n"
         f"Оценка спроса: {match.product.estimated_sales}\n"
@@ -56,5 +61,5 @@ def format_match(match: ProductKeywordMatch, index: int) -> str:
         f"Keyword volume: {match.keyword.estimated_volume}\n"
         f"Keyword difficulty: {match.keyword.difficulty if match.keyword.difficulty is not None else 'н/д'}\n"
         f"SEO suggestions:\n{suggestions}\n"
-        f"URL: {match.product.url}"
+        f"{url_label}: {match.product.url}"
     )

@@ -71,3 +71,4 @@ Recommended Railway setup:
 - `keyword volume` in this bot is a heuristic estimate based on trend score, not an absolute Google search volume value.
 - `SEO difficulty` in v1 is calculated by a mock provider.
 - In free mode the bot uses `PRODUCT_SOURCE=seed`, which means an internal catalog of product ideas instead of Keepa.
+- In free mode the bot returns Amazon search links for product ideas, not exact product detail pages with real ASINs.
